@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+	useEffect, useMemo, useRef, useState,
+} from 'react';
 import styled from 'styled-components';
 import ArrayMember from './ArrayMember';
+import { v4 as uuidv4 } from 'uuid';
 
 const List = styled.div`
 	width:100%;
@@ -9,10 +12,11 @@ const List = styled.div`
 interface EditorProps{
 	file:string
 }
-
+const uniqueKey = uuidv4();
 const Editor = ({ file }:EditorProps) => {
 	const [arr, setArr] = useState([]);
 	const i = useRef(1);
+
 	useEffect(() => {
 		if (file && i.current) {
 			if (JSON.parse(file).length < i.current * 50) {
@@ -29,8 +33,15 @@ const Editor = ({ file }:EditorProps) => {
 		}
 	}, [arr, file]);
 
-	// eslint-disable-next-line react/no-array-index-key
-	return <List>{arr.map((item:any, index:number) => <ArrayMember key={index} item={item} />)}</List>;
+	return (
+		<List>
+			{
+				arr.map((item:any, index:number) =>
+				// eslint-disable-next-line react/no-array-index-key
+					<ArrayMember key={index} item={item} uniqueKey={uniqueKey + index} />)
+			}
+		</List>
+	);
 };
 
 export default React.memo(Editor);

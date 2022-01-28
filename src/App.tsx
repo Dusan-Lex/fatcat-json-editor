@@ -44,15 +44,15 @@ const ChooseError = styled.p`
 `;
 
 const EditorBox = styled.div`
-	background: ${color.secondaryLight};
- color:${color.secondaryDark};
- margin:3rem auto;
- width:90%;
- max-width: 1400px;
- min-height: 40rem;
- border-radius: 2rem;
- padding:2rem;
- ${mixin.center}
+	/* background: ${color.primaryDark}; */
+	color:${color.secondaryDark};
+	margin: auto;
+	width:90%;
+	max-width: 1400px;
+	min-height: 40rem;
+	border-radius: 2rem;
+	padding:2rem;
+	${mixin.center}
 `;
 
 const DownloadButton = styled.button`
@@ -99,7 +99,7 @@ function App() {
 	return (
 		<>
 			<Title>JSON EDITOR</Title>
-			<Form>
+			<Form onSubmit={(e) => { e.preventDefault(); }}>
 				<div>
 					<ChooseLabel htmlFor="file-input" className={loading ? 'disabled' : ''}>
 						Choose file
