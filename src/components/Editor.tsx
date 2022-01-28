@@ -1,39 +1,36 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { color, mixin } from '../shered/styles';
-import Spinner from './Spinner';
+import ArrayMember from './ArrayMember';
 
-const StyledEditor = styled.div`
- background: ${color.secondaryLight};
- color:${color.secondaryDark};
- margin:3rem auto;
- width:90%;
- max-width: 1400px;
- min-height: 40rem;
- border-radius: 2rem;
- padding:2rem;
- ${mixin.center}
-`;
-
-const List = styled.ul`
- 
+const List = styled.div`
+	width:100%;
 `;
 
 interface EditorProps{
 	file:string
-	loading:boolean
-
 }
 
-const Editor = ({ file, loading }:EditorProps) => {
-	let arr = [];
-	if (file) { arr = JSON.parse(file); }
-	return (
-		<StyledEditor>
-			{loading ?
-				<Spinner /> : <List>{arr.map((item:unknown, index:number) => <li>item</li>)}</List>}
-		</StyledEditor>
-	);
+const Editor = ({ file }:EditorProps) => {
+	const [arr, setArr] = useState([]);
+	const i = useRef(1);
+	useEffect(() => {
+		if (file && i.current) {
+			if (JSON.parse(file).length < i.current * 50) {
+				setTimeout(() => {
+					setArr(JSON.parse(file));
+					i.current = 0;
+				}, 0);
+			} else {
+				setTimeout(() => {
+					setArr(JSON.parse(file).slice(0, 50 * i.current));
+					i.current += 1;
+				}, 0);
+			}
+		}
+	}, [arr, file]);
+
+	// eslint-disable-next-line react/no-array-index-key
+	return <List>{arr.map((item:any, index:number) => <ArrayMember key={index} item={item} />)}</List>;
 };
 
-export default Editor;
+export default React.memo(Editor);

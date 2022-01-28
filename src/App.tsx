@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Editor from './components/Editor';
+import Spinner from './components/Spinner';
 import { color, mixin } from './shered/styles';
 
 const Title = styled.h1`
@@ -40,6 +41,18 @@ const ChooseInput = styled.input`
 const ChooseError = styled.p`
   color:${color.error};
 	font-size: 2rem;
+`;
+
+const EditorBox = styled.div`
+	background: ${color.secondaryLight};
+ color:${color.secondaryDark};
+ margin:3rem auto;
+ width:90%;
+ max-width: 1400px;
+ min-height: 40rem;
+ border-radius: 2rem;
+ padding:2rem;
+ ${mixin.center}
 `;
 
 const DownloadButton = styled.button`
@@ -94,7 +107,7 @@ function App() {
 					<ChooseInput type="file" id="file-input" name="imageuploads" accept="application/json" onChange={changeHandler} disabled={loading} />
 					{error && <ChooseError>The selected file must be JSON file!</ChooseError>}
 				</div>
-				<Editor file={file} loading={loading} />
+				<EditorBox>{loading ? <Spinner /> : <Editor file={file} />}</EditorBox>
 				{!error && file && <DownloadButton type="submit">Download JSON file</DownloadButton>}
 			</Form>
 
