@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 
 import styled from 'styled-components';
 import { color, mixin } from '../shered/styles';
@@ -51,13 +51,22 @@ const CurlyBrackets = styled.div`
 	font-size: 3rem;
 `;
 
-interface ArrayMemberProps {
+interface Props {
 	item:any,
 	uniqueKey:string
 }
 
-const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
-	const [data, setData] = useState(item);
+export type ArrayMemberHandle = {
+  state:any;
+};
+
+const ArrayMember = React.forwardRef<ArrayMemberHandle, Props>((props, ref) => {
+	const [data, setData] = useState(props.item);
+
+	useImperativeHandle(ref, () => ({
+		state: data,
+	}));
+
 	const changeHandler = (event:React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>, key?:any) => {
 		let val:string|number|boolean = event.target.value;
 		if (event.target.type === 'number') {
@@ -73,8 +82,8 @@ const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
 	return (
 		<ListItem>
 			<CurlyBrackets>&#10100;</CurlyBrackets>
-			{Object.entries(item).map(([key, value], index) => {
-				const uniqueKey1 = uniqueKey + index;
+			{Object.entries(props.item).map(([key, value], index) => {
+				const uniqueKey1 = props.uniqueKey + index;
 
 				let stringInput = <input name={key} value={data[key]} type="text" onChange={changeHandler} />;
 				if (typeof (value) === 'string') {
@@ -119,6 +128,6 @@ const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
 			<CurlyBrackets>&#10101;</CurlyBrackets>
 		</ListItem>
 	);
-};
+});
 
 export default React.memo(ArrayMember);

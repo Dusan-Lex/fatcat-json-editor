@@ -2,14 +2,14 @@ import React, {
 	useEffect, useRef, useState,
 } from 'react';
 import styled from 'styled-components';
-import ArrayMember from './ArrayMember';
+import ArrayMember, { ArrayMemberHandle } from './ArrayMember';
 import { v4 as uuidv4 } from 'uuid';
 import { color } from '../shered/styles';
 
 const List = styled.div`
 	width:100%;
 `;
-const DownloadButton = styled.a`
+const DownloadButton = styled.button`
 	color:${color.tertiary};
 	display: inline-block;
   padding: 1.2rem 2.4rem;
@@ -31,6 +31,22 @@ const Editor = ({ jsonFile }:EditorProps) => {
 
 	const [arr, setArr] = useState([]);
 	const i = useRef(1);
+	const ref = useRef<ArrayMemberHandle[]|null[]>([]);
+
+	const clickHandler = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		event.preventDefault();
+		const blob = new Blob([JSON.stringify(ref.current)], { type: 'application/json' });
+		const a = document.createElement('a');
+		a.download = 'edited.json';
+		a.href = window.URL.createObjectURL(blob);
+		const clickEvt = new MouseEvent('click', {
+			view: window,
+			bubbles: true,
+			cancelable: true,
+		});
+		a.dispatchEvent(clickEvt);
+		a.remove();
+	};
 
 	useEffect(() => {
 		if (i.current) {
@@ -54,15 +70,13 @@ const Editor = ({ jsonFile }:EditorProps) => {
 				{
 					arr.map((item:any, index:number) =>
 					// eslint-disable-next-line react/no-array-index-key
-						<ArrayMember key={index} item={item} uniqueKey={uniqueKey + index} />)
+						<ArrayMember key={index} item={item} uniqueKey={uniqueKey + index} ref={(el) => { ref.current[index] = el?.state; }} />)
 				}
 			</List>
 			{file.length && i.current === 1 + Math.floor(file.length / 50) && (
 				<DownloadButton
-					href={`data:text/json;charset=utf-8,${encodeURIComponent(
-						JSON.stringify(file)
-					)}`}
-					download="edited.json"
+					type="button"
+					onClick={clickHandler}
 				>
 					Download JSON file
 				</DownloadButton>

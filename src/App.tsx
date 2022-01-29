@@ -94,7 +94,7 @@ function App() {
 			<Form onSubmit={(e) => { e.preventDefault(); }}>
 				<div>
 					<ChooseLabel htmlFor="file-input" className={loading ? 'disabled' : ''}>
-						Choose file
+						Choose JSON file
 					</ChooseLabel>
 					<ChooseInput type="file" id="file-input" name="imageuploads" accept="application/json" onChange={changeHandler} disabled={loading} />
 					<ChooseError>{error && 'The selected file must be JSON file!'}</ChooseError>
