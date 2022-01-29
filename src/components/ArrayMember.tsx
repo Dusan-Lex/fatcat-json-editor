@@ -5,7 +5,7 @@ import { color, mixin } from '../shered/styles';
 
 const ListItem = styled.div`
 	background-color: ${color.secondaryLight};
-	margin:2rem;
+	margin:0 2rem 4rem;
 	padding:2rem;
 	border-radius:0.5rem;
 	color:${color.secondaryDark};
@@ -20,12 +20,14 @@ const ListItem = styled.div`
 		width:100%;
 		height:3rem;
 		font-size: 1.6rem;
+		margin-top:1rem;
 	}
 	textarea{
 		height:20rem;
 	}
 	label{
-		font-size: 2rem;;
+		font-size: 2rem;
+		text-align:end;
 	}
 `;
 
@@ -33,7 +35,7 @@ const PropertyBox = styled.div`
 	width:90%;
 	max-width: 50rem;
 	padding:1rem;
-	border:2px solid ${color.secondaryDark};
+	border:0.3rem solid ${color.secondaryDark};
 	margin:1rem;
 	.property-value{
 		text-align:start;
@@ -41,15 +43,13 @@ const PropertyBox = styled.div`
 		color:${color.primaryLight};
 		padding:2rem;
 		font-size: 2rem;
-		margin-bottom: 1rem;
 		word-wrap: break-word;
 	}
 `;
 
-// const CurlyBrackets = styled.span`
-// 	font-size: 3rem;
-// 	color:${color.secondaryDark};
-// `;
+const CurlyBrackets = styled.div`
+	font-size: 3rem;
+`;
 
 interface ArrayMemberProps {
 	item:any,
@@ -58,7 +58,6 @@ interface ArrayMemberProps {
 
 const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
 	const [data, setData] = useState(item);
-
 	const changeHandler = (event:React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>, key?:any) => {
 		let val:string|number|boolean = event.target.value;
 		if (event.target.type === 'number') {
@@ -73,7 +72,7 @@ const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
 
 	return (
 		<ListItem>
-			{/* <CurlyBrackets>&#10100;</CurlyBrackets> */}
+			<CurlyBrackets>&#10100;</CurlyBrackets>
 			{Object.entries(item).map(([key, value], index) => {
 				const uniqueKey1 = uniqueKey + index;
 
@@ -99,7 +98,7 @@ const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
 								{typeof (value) === 'boolean' ? JSON.stringify(data[key]) : data[key]}
 							</div>
 							{typeof (value) === 'string' && !['id', '_id'].includes(key) ? stringInput : null}
-							{typeof (value) === 'number' ? <input name={key} value={data[key]} type="number" onChange={changeHandler} /> : null}
+							{typeof (value) === 'number' ? <input name={key} value={data[key]} type="number" step="any" onChange={changeHandler} /> : null}
 							{typeof (value) === 'boolean' ? (
 								<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
 									<label htmlFor={`${uniqueKey1}yes`}>
@@ -117,7 +116,7 @@ const ArrayMember = ({ item, uniqueKey }:ArrayMemberProps) => {
 					)
 				);
 			})}
-			{/* <CurlyBrackets>&#10101;</CurlyBrackets> */}
+			<CurlyBrackets>&#10101;</CurlyBrackets>
 		</ListItem>
 	);
 };

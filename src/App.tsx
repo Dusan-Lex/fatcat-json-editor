@@ -46,32 +46,21 @@ const ChooseError = styled.p`
 `;
 
 const EditorBox = styled.div`
-	/* background: ${color.primaryDark}; */
+	/* background: ${color.secondaryLight}; */
 	color:${color.secondaryDark};
 	margin: auto;
   width:97%;
 	max-width: 1400px;
 	min-height: 40rem;
 	border-radius: 2rem;
-	padding: 2rem 0;
-	${mixin.center}
+	padding: 2rem 0 0;
+	${mixin.center};
+	flex-direction: column;
 	
 `;
 
-const DownloadButton = styled.button`
-	color:${color.tertiary};
-	display: inline-block;
-  padding: 1.2rem 2.4rem;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: ${color.primaryDark};
-  font-size: 1.7rem;
-	font-weight:600;
-	margin-bottom: 3rem;
-`;
-
 function App() {
-	const [file, setFile] = React.useState<string>('');
+	const [file, setFile] = React.useState<string>('[]');
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [error, setError] = React.useState<boolean>(false);
 
@@ -94,7 +83,7 @@ function App() {
 				event.target.value = '';
 				setError(true);
 				setLoading(false);
-				setFile('');
+				setFile('[]');
 			}
 		}
 	};
@@ -110,10 +99,8 @@ function App() {
 					<ChooseInput type="file" id="file-input" name="imageuploads" accept="application/json" onChange={changeHandler} disabled={loading} />
 					<ChooseError>{error && 'The selected file must be JSON file!'}</ChooseError>
 				</div>
-				<EditorBox>{loading ? <Spinner /> : <Editor file={file} />}</EditorBox>
-				{!error && !loading && file && <DownloadButton type="submit">Download JSON file</DownloadButton>}
+				<EditorBox>{loading ? <Spinner /> : <Editor jsonFile={file} />}</EditorBox>
 			</Form>
-
 		</>
 	);
 }
