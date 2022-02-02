@@ -1,22 +1,20 @@
-import React, {
-	useEffect, useRef, useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ArrayMember, { ArrayMemberHandle } from './ArrayMember';
-import { v4 as uuidv4 } from 'uuid';
 import { color } from '../shered/styles';
 
 const List = styled.div`
 	width:100%;
 `;
+
 const DownloadButton = styled.button`
 	color:${color.tertiary};
 	display: inline-block;
-  padding: 1.2rem 2.4rem;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: ${color.primaryDark};
-  font-size: 1.7rem;
+	padding: 1.2rem 2.4rem;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: ${color.primaryDark};
+	font-size: 1.7rem;
 	font-weight:600;
 	margin-bottom: 4rem;
 `;
@@ -24,14 +22,14 @@ const DownloadButton = styled.button`
 interface EditorProps{
 	jsonFile:string
 }
-const uniqueKey = uuidv4();
+
+const key = '7jj10fckjsdkf8d6t78as6d87yasd78';
 
 const Editor = ({ jsonFile }:EditorProps) => {
-	const file = Array.isArray(JSON.parse(jsonFile)) ? JSON.parse(jsonFile) : JSON.parse(`[${jsonFile}]`);
-
 	const [arr, setArr] = useState([]);
 	const i = useRef(1);
 	const ref = useRef<ArrayMemberHandle[]|null[]>([]);
+	const file = Array.isArray(JSON.parse(jsonFile)) ? JSON.parse(jsonFile) : JSON.parse(`[${jsonFile}]`);
 
 	const clickHandler = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		event.preventDefault();
@@ -70,7 +68,7 @@ const Editor = ({ jsonFile }:EditorProps) => {
 				{
 					arr.map((item:any, index:number) =>
 					// eslint-disable-next-line react/no-array-index-key
-						<ArrayMember key={index} item={item} uniqueKey={uniqueKey + index} ref={(el) => { ref.current[index] = el?.state; }} />)
+						<ArrayMember key={index} item={item} uniqueKey={key + index} ref={(el) => { ref.current[index] = el?.state; }} />)
 				}
 			</List>
 			{file.length && i.current === 1 + Math.floor(file.length / 50) && (
@@ -85,4 +83,4 @@ const Editor = ({ jsonFile }:EditorProps) => {
 	);
 };
 
-export default React.memo(Editor);
+export default Editor;

@@ -57,7 +57,7 @@ interface Props {
 }
 
 export type ArrayMemberHandle = {
-  state:any;
+	state:any;
 };
 
 const ArrayMember = React.forwardRef<ArrayMemberHandle, Props>((props, ref) => {
@@ -120,7 +120,6 @@ const ArrayMember = React.forwardRef<ArrayMemberHandle, Props>((props, ref) => {
 									</label>
 								</div>
 							) : null}
-
 						</PropertyBox>
 					)
 				);
