@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { unstable_batchedUpdates as unstableBatchedUpdates } from 'react-dom';
 import styled from 'styled-components';
 import ArrayMember, { ArrayMemberHandle } from './ArrayMember';
 import { color } from '../shered/styles';
@@ -23,11 +24,9 @@ interface EditorProps{
 	jsonFile:string
 }
 
-const key = '7jj10fckjsdkf8d6t78as6d87yasd78';
-
-const Editor = ({ jsonFile }:EditorProps) => {
+const Editor:React.FC<EditorProps> = ({ jsonFile }) => {
 	const [arr, setArr] = useState([]);
-	const i = useRef(1);
+	const [count, setCount] = useState<number>(1);
 	const ref = useRef<ArrayMemberHandle[]|null[]>([]);
 	const file = Array.isArray(JSON.parse(jsonFile)) ? JSON.parse(jsonFile) : JSON.parse(`[${jsonFile}]`);
 
@@ -36,7 +35,7 @@ const Editor = ({ jsonFile }:EditorProps) => {
 		const blob = new Blob([JSON.stringify(ref.current)], { type: 'application/json' });
 		const a = document.createElement('a');
 		a.download = 'edited.json';
-		a.href = window.URL.createObjectURL(blob);
+		a.href = URL.createObjectURL(blob);
 		const clickEvt = new MouseEvent('click', {
 			view: window,
 			bubbles: true,
@@ -47,20 +46,24 @@ const Editor = ({ jsonFile }:EditorProps) => {
 	};
 
 	useEffect(() => {
-		if (i.current) {
-			if (file.length < i.current * 50) {
+		if (file.length && count) {
+			if (file.length < count * 50) {
 				setTimeout(() => {
-					setArr(file);
-					i.current = 0;
+					unstableBatchedUpdates(() => {
+						setArr(file);
+						setCount(0);
+					});
 				}, 0);
 			} else {
 				setTimeout(() => {
-					setArr(file.slice(0, 50 * i.current));
-					i.current += 1;
+					unstableBatchedUpdates(() => {
+						setArr(file.slice(0, 50 * count));
+						setCount(prevcount => prevcount + 1);
+					});
 				}, 0);
 			}
 		}
-	}, [arr, file]);
+	}, [arr, file, count]);
 
 	return (
 		<>
@@ -68,10 +71,10 @@ const Editor = ({ jsonFile }:EditorProps) => {
 				{
 					arr.map((item:any, index:number) =>
 					// eslint-disable-next-line react/no-array-index-key
-						<ArrayMember key={index} item={item} uniqueKey={key + index} ref={(el) => { ref.current[index] = el?.state; }} />)
+						<ArrayMember key={index} item={item} uniqueKey={index.toString()} ref={(el) => { ref.current[index] = el?.state; }} />)
 				}
 			</List>
-			{file.length && i.current === 1 + Math.floor(file.length / 50) && (
+			{file.length && count === 0 && (
 				<DownloadButton
 					type="button"
 					onClick={clickHandler}
