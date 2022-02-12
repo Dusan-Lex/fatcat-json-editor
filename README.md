@@ -1,46 +1,47 @@
-# Getting Started with Create React App
+# React Engineer task 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## JSON Editor 
 
-## Available Scripts
+This is a react task that I received from a software company in Serbia during the selection process. 
 
-In the project directory, you can run:
+This is how I solved that task.
 
-### `npm start`
+Live : https://fatcat-json-editor.vercel.app/
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Task requirements
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Create an application that will take a RANDOM GENERATED JSON file and create a renderer and editor for the JSON file.
 
-### `npm test`
+The system should create a page where for every array member in the JSON file we
+will see a row with property->value and under it input fields to edit the value for every
+property of the array member.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+So basically a row where we view data of array member of the JSON file and a row
+where we edit data of that array member. The page will render these groups for every
+array member. If the JSON has 10 array members, it will render 10 groups of 2 rows. If
+it has 1000 array members, it will render 1000 groups of 2 rows.
+It is important to note that all these items are on the same page.
+There is no pagination, and everything is always visible.
 
-### `npm run build`
+### How is the edit system generated?
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- If the id field exists, it will not have an input field for editing.
+- If the value is a string, it will create an input field with type text.
+- If the value is a number, it will create an input field with a number as a type.
+- If the value is email, it will create an input field with email as type.
+- If the value is a date, it will use a html date picker.
+- If the value is boolean, it will use a radio button with “true/false”.
+- If the field value is a long text, use the textarea field.
+- If the field value is another JSON, just ignore it.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+There is no need for data validation.\
+There is no need for a fancy UI.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### NOTES:
+- Task must be done in Typescript
+- React must be used for the front-end
+- You can use Redux, or Context, or just state to manage your data.
+- Performance is important. The JSON file can have unlimited data, so think it
+through.
+- With this task you must provide a JSON file with 1000 rows at minimum and
+you can use https://www.json-generator.com/ to build your json file with ease.
